@@ -1,0 +1,79 @@
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+PADDINGS=3 
+
+
+bar=(
+  corner_radius=12
+  height=42
+  color=$BAR_COLOR
+  border_width=2
+  border_color=$BAR_BORDER_COLOR
+  shadow=off
+  position=top
+  sticky=on
+  y_offset=0
+  margin=6
+  topmost=window
+)
+
+default=(
+  padding_left=4
+  padding_right=4
+  icon.font="Hack Nerd Font:Bold:14.0"
+  label.font="Hack Nerd Font:Bold:15.0"
+  icon.color=0xebebebff
+  label.color=0xffffffff
+  icon.padding_left=4
+  icon.padding_right=4
+  icon.padding_top=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+
+SPACE_ICONS=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
+for i in "${!SPACE_ICONS[@]}"
+do
+  sid="$(($i+1))"
+  space=(
+    space="$sid"
+    icon="${SPACE_ICONS[i]}"
+    icon.padding_left=16
+    icon.padding_right=16
+    background.color=0x40ffffff
+    background.corner_radius=8
+    background.height=16
+    label.drawing=off
+    script="$PLUGIN_DIR/space.sh"
+    click_script="yabai -m space --focus $sid"
+  )
+  sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}"
+done
+
+source "$PLUGIN_DIR/wifi.sh"
+
+##### Adding Left Items #####
+
+sketchybar --add item chevron left \
+           --add item front_app left \
+           --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+           --subscribe front_app front_app_switched
+
+##### Adding Right Items #####
+# https://felixkratz.github.io/SketchyBar/config/events
+
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
+           --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change \
+           --add item wifi right \
+           --set wifi script="$PLUGIN_DIR/wifi.sh" \
+
+sketchybar --hotload on
+sketchybar --update
