@@ -52,8 +52,6 @@ do
   sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}"
 done
 
-source "$PLUGIN_DIR/wifi.sh"
-
 ##### Adding Left Items #####
 
 sketchybar --add item chevron left \
@@ -71,9 +69,20 @@ sketchybar --add item clock right \
            --subscribe volume volume_change \
            --add item battery right \
            --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change \
-           --add item wifi right \
+           --subscribe battery system_woke power_source_change
+
+##### Adding WiFi Item with Popup #####
+sketchybar --add item wifi right \
            --set wifi script="$PLUGIN_DIR/wifi.sh" \
+                      icon.font="Hack Nerd Font:Bold:16.0" \
+                      update_freq=10 \
+           --subscribe wifi wifi_change mouse.clicked \
+           --add item wifi.ssid popup.wifi \
+           --set wifi.ssid icon= \
+                           label="Loading..." \
+           --add item wifi.ipaddress popup.wifi \
+           --set wifi.ipaddress icon=󰩟 \
+                                label="Loading..."
 
 sketchybar --hotload on
 sketchybar --update

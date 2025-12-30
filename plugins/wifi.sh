@@ -3,37 +3,37 @@
 # Loads defined colors
 source "$CONFIG_DIR/colors.sh"
 
-IS_VPN=$(/usr/local/bin/piactl get connectionstate)
-# IS_VPN="Disconnected"
-# CURRENT_WIFI="$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I)"
-CURRENT_WIFI="$(ipconfig getsummary en0)"
-# IP_ADDRESS="$(ipconfig getifaddr en0)"
+# Check VPN status (set to Disconnected if piactl not available)
+if [ -f /usr/local/bin/piactl ]; then
+  IS_VPN=$(/usr/local/bin/piactl get connectionstate 2>/dev/null)
+else
+  IS_VPN="Disconnected"
+fi
+
+# Get WiFi info
+CURRENT_WIFI="$(ipconfig getsummary en0 2>/dev/null)"
 IP_ADDRESS="$(echo "$CURRENT_WIFI" | grep -o "ciaddr = .*" | sed 's/^ciaddr = //')"
 SSID="$(echo "$CURRENT_WIFI" | grep -o "SSID : .*" | sed 's/^SSID : //' | tail -n 1)"
-# CURR_TX="$(echo "$CURRENT_WIFI" | grep -o "lastTxRate: .*" | sed 's/^lastTxRate: //')"
 
+# Set icon and color based on connection status
 if [[ $IS_VPN != "Disconnected" ]]; then
   ICON_COLOR=$HIGHLIGHT
   ICON=􀎡
 elif [[ $SSID = "Ebrietas" ]]; then
-  ICON_COLOR=$(getcolor white)
+  ICON_COLOR=0xffffffff
   ICON=􀉤
 elif [[ $SSID != "" ]]; then
-  ICON_COLOR=$(getcolor white)
+  ICON_COLOR=0xffffffff
   ICON=􀐿
-elif [[ $CURRENT_WIFI = "AirPort: Off" ]]; then
-  ICON=􀐾
 else
-  ICON_COLOR=$(getcolor white 25)
+  ICON_COLOR=0x40ffffff
   ICON=􀐾
 fi
 
 render_bar_item() {
-  DRAWING=$([ "$(cat /tmp/sketchybar_sender)" == "focus_on" ] && echo "off" || echo "on")
   sketchybar --set $NAME \
     icon.color=$ICON_COLOR \
-    icon=$ICON \
-    drawing=$DRAWING
+    icon=$ICON
 }
 
 render_popup() {
