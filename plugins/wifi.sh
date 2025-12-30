@@ -18,16 +18,16 @@ SSID="$(echo "$CURRENT_WIFI" | grep -o "SSID : .*" | sed 's/^SSID : //' | tail -
 # Set icon and color based on connection status
 if [[ $IS_VPN != "Disconnected" ]]; then
   ICON_COLOR=$HIGHLIGHT
-  ICON=􀎡
+  ICON=󰖪
 elif [[ $SSID = "Ebrietas" ]]; then
   ICON_COLOR=0xffffffff
-  ICON=􀉤
+  ICON=󱛂
 elif [[ $SSID != "" ]]; then
   ICON_COLOR=0xffffffff
-  ICON=􀐿
+  ICON=
 else
   ICON_COLOR=0x40ffffff
-  ICON=􀐾
+  ICON=
 fi
 
 render_bar_item() {

@@ -56,7 +56,9 @@ done
 
 sketchybar --add item chevron left \
            --add item front_app left \
-           --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+           --set front_app icon.drawing=off \
+                          label.font="Hack Nerd Font:Bold:12.0" \
+                          script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
 ##### Adding Right Items #####
@@ -75,7 +77,7 @@ sketchybar --add item volume right \
 ##### Adding WiFi Item with Popup #####
 sketchybar --add item wifi right \
            --set wifi script="$PLUGIN_DIR/wifi.sh" \
-                      icon.font="Hack Nerd Font:Bold:16.0" \
+                      icon.font="Hack Nerd Font:Bold:12.0" \
                       update_freq=10 \
            --subscribe wifi wifi_change mouse.clicked \
            --add item wifi.ssid popup.wifi \
@@ -86,12 +88,8 @@ sketchybar --add item wifi right \
                                 label="Loading..."
 
 ##### Adding System Monitor Items #####
-sketchybar --add item disk right \
-           --set disk update_freq=60 script="$PLUGIN_DIR/disk.sh" \
-           --add item ram right \
-           --set ram update_freq=5 script="$PLUGIN_DIR/ram.sh" \
-           --add item cpu right \
-           --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh"
+sketchybar --add item ram right \
+           --set ram update_freq=5 script="$PLUGIN_DIR/ram.sh"
 
 sketchybar --hotload on
 sketchybar --update
