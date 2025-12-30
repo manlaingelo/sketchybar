@@ -61,16 +61,6 @@ sketchybar --add item chevron left \
 
 ##### Adding Right Items #####
 # https://felixkratz.github.io/SketchyBar/config/events
-# Order (right to left): volume, clock, battery, wifi, disk, ram, cpu
-
-sketchybar --add item volume right \
-           --set volume script="$PLUGIN_DIR/volume.sh" \
-           --subscribe volume volume_change \
-           --add item clock right \
-           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
-           --add item battery right \
-           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
 
 ##### Adding WiFi Item with Popup #####
 sketchybar --add item wifi right \
@@ -86,12 +76,20 @@ sketchybar --add item wifi right \
                                 label="Loading..."
 
 ##### Adding System Monitor Items #####
-sketchybar --add item disk right \
-           --set disk update_freq=60 script="$PLUGIN_DIR/disk.sh" \
+sketchybar --add item cpu right \
+           --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh" \
            --add item ram right \
            --set ram update_freq=5 script="$PLUGIN_DIR/ram.sh" \
-           --add item cpu right \
-           --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh"
+           --add item disk right \
+           --set disk update_freq=60 script="$PLUGIN_DIR/disk.sh"
 
-sketchybar --hotload on
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
+           --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
 sketchybar --update
